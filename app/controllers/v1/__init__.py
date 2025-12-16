@@ -13,5 +13,11 @@ _api = Api(
 )
 
 from .conversations import api as conversations_api
+from .packages import api as packages_api
+from .faqs import api as faqs_api
+from .file_imports import api as file_imports_api
 
 _api.add_namespace(conversations_api)
+_api.add_namespace(packages_api)
+_api.add_namespace(faqs_api)
+_api.add_namespace(file_imports_api)

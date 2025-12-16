@@ -18,3 +18,8 @@ db = client.get_default_database()
 
 conversations_collection = db.conversations
 messages_collection = db.messages
+
+# S11 Collections
+packages_collection = db.packages
+faqs_collection = db.faqs
+file_imports_collection = db.file_imports

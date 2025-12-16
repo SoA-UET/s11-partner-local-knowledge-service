@@ -1,10 +1,11 @@
 """
-WARNING: Change this file if the
-service does not need HTTP API
-or WebSocket features.
+S11 Partner Local Knowledge Service
+
+This service manages partner-specific telecom knowledge database
+and handles local queries, file imports, and knowledge updates.
 """
 
-SERVICE_NAME = "Telcenter Consultation Service" # change this
+SERVICE_NAME = "S11 Partner Local Knowledge Service"
 
 
 
