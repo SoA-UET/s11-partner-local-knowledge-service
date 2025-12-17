@@ -45,7 +45,7 @@ class FileImportService(BaseCRUDService):
 
     def set_mq_service(self, mq_service: MessageQueueService):
         """Set the MessageQueueService for RabbitMQ communication."""
-        self._mq_service = mq_service
+        self._mq_service = mq_service.clone()
 
     def get_collection(self, pageable: Pageable, filters: dict[str, Any] | None = None):
         """
@@ -88,6 +88,8 @@ class FileImportService(BaseCRUDService):
         
         # Step 3: Send import_file request to S15
         if self._mq_service:
+            mq_service = self._mq_service.clone()
+
             request_message = {
                 "method": "import_file",
                 "params": {
@@ -97,8 +99,8 @@ class FileImportService(BaseCRUDService):
             }
             
             try:
-                self._mq_service.declare_queue(self.request_queue)
-                self._mq_service.publish_message(self.request_queue, request_message)
+                mq_service.declare_queue(self.request_queue)
+                mq_service.publish_message(self.request_queue, request_message)
                 logger.info(f"Sent import_file request for file import {file_import_id}")
             except Exception as e:
                 logger.error(f"Failed to send import_file request: {e}")
