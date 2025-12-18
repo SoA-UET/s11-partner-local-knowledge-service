@@ -96,6 +96,8 @@ class SnapshotService:
         """
         request_id = message.get("id")
         method = message.get("method")
+
+        print(f"Received snapshot request: {message}")
         
         if not request_id:
             logger.error("Received snapshot request without id")
@@ -118,6 +120,8 @@ class SnapshotService:
         if not self._mq_service:
             logger.error("MQ service not set, cannot send response")
             return
+
+        mq = self._mq_service.clone()
         
         response = {
             "id": request_id,
@@ -127,8 +131,8 @@ class SnapshotService:
             }
         }
         
-        self._mq_service.declare_queue(self.response_queue)
-        self._mq_service.publish_message(self.response_queue, response)
+        mq.declare_queue(self.response_queue)
+        mq.publish_message(self.response_queue, response)
         logger.info(f"Sent snapshot success response for request {request_id}")
 
     def _send_error_response(self, request_id: str, error_message: str):
@@ -136,6 +140,8 @@ class SnapshotService:
         if not self._mq_service:
             logger.error("MQ service not set, cannot send response")
             return
+        
+        mq = self._mq_service.clone()
         
         response = {
             "id": request_id,
@@ -145,6 +151,6 @@ class SnapshotService:
             }
         }
         
-        self._mq_service.declare_queue(self.response_queue)
-        self._mq_service.publish_message(self.response_queue, response)
+        mq.declare_queue(self.response_queue)
+        mq.publish_message(self.response_queue, response)
         logger.info(f"Sent snapshot error response for request {request_id}")
